@@ -54,14 +54,16 @@ defmodule Servy.Handler do
   end
 
   defp status_reason(code) do
-    %{
+    codes = %{
       200 => "OK",
       201 => "Created",
       401 => "Unauthorized",
       403 => "Forbidden",
       404 => "Not Found",
       500 => "Internal Server Error"
-    }[code]
+    }
+
+    codes[code]
   end
 end
 
