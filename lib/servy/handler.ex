@@ -1,3 +1,5 @@
+require Logger
+
 defmodule Servy.Handler do
   def handle(request) do
     request
@@ -10,7 +12,7 @@ defmodule Servy.Handler do
   end
 
   def track(%{status: 404, path: path} = conv) do
-    IO.puts("Warning: #{path} is on the loose!")
+    Logger.warn("Warning: #{path} is on the loose!")
     conv
   end
 
@@ -88,7 +90,7 @@ Accept: */*
 
 response = Servy.Handler.handle(request)
 
-IO.puts(response)
+Logger.info(response)
 
 request = """
 GET /bears HTTP/1.1
@@ -100,7 +102,7 @@ Accept: */*
 
 response = Servy.Handler.handle(request)
 
-IO.puts(response)
+Logger.info(response)
 
 request = """
 GET /bigfoot HTTP/1.1
@@ -112,7 +114,7 @@ Accept: */*
 
 response = Servy.Handler.handle(request)
 
-IO.puts(response)
+Logger.info(response)
 
 request = """
 GET /bears/1 HTTP/1.1
@@ -124,7 +126,7 @@ Accept: */*
 
 response = Servy.Handler.handle(request)
 
-IO.puts(response)
+Logger.info(response)
 
 request = """
 GET /wildlife HTTP/1.1
@@ -136,4 +138,4 @@ Accept: */*
 
 response = Servy.Handler.handle(request)
 
-IO.puts(response)
+Logger.info(response)
