@@ -23,11 +23,11 @@ defmodule Servy.Handler do
   end
 
   def route(%Conv{method: "GET", path: "/wildthings"} = conv) do
-    %{conv | status: 200, resp_body: "Bears, Lions, Tigers"}
+    %Conv{conv | status: 200, resp_body: "Bears, Lions, Tigers"}
   end
 
   def route(%Conv{method: "GET", path: "/bears"} = conv) do
-    %{conv | status: 200, resp_body: "Teddy, Smokey, Paddington"}
+    %Conv{conv | status: 200, resp_body: "Teddy, Smokey, Paddington"}
   end
 
   def route(%Conv{method: "GET", path: "/bears/new"} = conv) do
@@ -38,7 +38,7 @@ defmodule Servy.Handler do
   end
 
   def route(%Conv{method: "GET", path: "/bears/" <> id} = conv) do
-    %{conv | status: 200, resp_body: "Bear #{id}"}
+    %Conv{conv | status: 200, resp_body: "Bear #{id}"}
   end
 
   def route(%Conv{method: "GET", path: "/pages/" <> file} = conv) do
@@ -49,7 +49,7 @@ defmodule Servy.Handler do
   end
 
   def route(%Conv{path: path} = conv) do
-    %{conv | status: 404, resp_body: "No #{path} here!"}
+    %Conv{conv | status: 404, resp_body: "No #{path} here!"}
   end
 
   def format_response(%Conv{} = conv) do
