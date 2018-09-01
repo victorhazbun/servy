@@ -3,8 +3,8 @@ defmodule Servy.Conv do
             path: "", 
             params: %{},
             headers: %{},
-            resp_content_type: "text/html",
-            resp_body: "", 
+            resp_body: "",
+            resp_headers: %{"Content-Type" => "text/html"},
             status: nil
 
   def full_status(conv) do
