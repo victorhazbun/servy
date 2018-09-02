@@ -62,11 +62,12 @@ defmodule Servy.Handler do
     BearController.delete(conv, conv.params)
   end
 
-  def route(%Conv{method: "GET", path: "/pages/" <> file} = conv) do
+  def route(%Conv{method: "GET", path: "/pages/" <> name} = conv) do
     @pages_path
-    |> Path.join(file <> ".html")
-    |> File.read()
+    |> Path.join("#{name}.md")
+    |> File.read
     |> handle_file(conv)
+    |> markdown_to_html
   end
 
   def route(%Conv{ path: path } = conv) do
@@ -92,6 +93,12 @@ defmodule Servy.Handler do
       "#{key}: #{value}\r"
     end) |> Enum.sort |> Enum.reverse |> Enum.join("\n")
   end
+
+  def markdown_to_html(%Conv{status: 200} = conv) do
+    %{ conv | resp_body: Earmark.as_html!(conv.resp_body) }
+  end
+
+  def markdown_to_html(%Conv{} = conv), do: conv
 
 end
 
