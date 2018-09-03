@@ -1,21 +1,19 @@
 # Servy
 
-**TODO: Add description**
+**TODO: Pure Elixir/OTP web application**
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `servy` to your list of dependencies in `mix.exs`:
+### Install dependencies
 
-```elixir
-def deps do
-  [
-    {:servy, "~> 0.1.0"}
-  ]
-end
-```
+`mix deps.get`
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/servy](https://hexdocs.pm/servy).
+## Running the application
 
+`iex -S mix`
+
+`> Servy.HttpServer.serve(3000)`
+
+Visit http://localhost:3000
+Visit http://localhost:3000/bears
+Visit http://localhost:3000/pages/faq (will convert a Markdown file into HTML)
