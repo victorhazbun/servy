@@ -4,6 +4,7 @@ defmodule Servy.Handler do
 
   alias Servy.Conv
   alias Servy.BearController
+  alias Servy.PledgeController
   alias Servy.VideoCam
   alias Servy.Tracker
 
@@ -24,6 +25,14 @@ defmodule Servy.Handler do
     |> track
     |> put_content_length
     |> format_response
+  end
+
+  def route(%Conv{method: "POST", path: "/pledges"} = conv) do
+    PledgeController.create(conv, conv.params)
+  end
+
+  def route(%Conv{method: "GET", path: "/pledges"} = conv) do
+    PledgeController.index(conv)
   end
 
   def route(%Conv{ method: "GET", path: "/sensors"} = conv) do
