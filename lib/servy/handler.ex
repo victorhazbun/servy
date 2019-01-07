@@ -6,20 +6,21 @@ defmodule Servy.Handler do
   alias Servy.BearController
   alias Servy.VideoCam
   alias Servy.Tracker
-    
+
   @pages_path Path.expand("pages", File.cwd!())
 
   import Servy.Plugins, only: [rewrite_path: 1, log: 1, track: 1]
   import Servy.Parser, only: [parse: 1]
   import Servy.FileHandler, only: [handle_file: 2]
+  import Servy.View, only: [render: 3]
 
   @doc "Transforms the request into a response."
   def handle(request) do
-    request 
+    request
     |> parse
     |> rewrite_path
-    |> log 
-    |> route 
+    |> log
+    |> route
     |> track
     |> put_content_length
     |> format_response
@@ -28,14 +29,14 @@ defmodule Servy.Handler do
   def route(%Conv{ method: "GET", path: "/sensors"} = conv) do
     task = Task.async(Tracker, :get_location, ["bigfoot"])
 
-    snapshots = 
+    snapshots =
     ["cam-1", "cam-2", "cam-3"]
     |> Enum.map(&Task.async(fn -> VideoCam.get_snapshot(&1) end))
     |> Enum.map(&Task.await(&1, :timer.seconds(2)))
-    
+
     where_is_bigfoot = Task.await(task, :timer.seconds(2))
 
-    %{ conv | status: 200, resp_body: inspect {snapshots, where_is_bigfoot} }
+    render(conv, "sensors.eex", snapshots: snapshots, location: where_is_bigfoot)
   end
 
   def route(%Conv{ method: "GET", path: "/kaboom" }) do
@@ -44,12 +45,12 @@ defmodule Servy.Handler do
 
   def route(%Conv{ method: "GET", path: "/hibernate/" <> time } = conv) do
     time |> String.to_integer |> :timer.sleep
-    
-    %{ conv | status: 200, resp_body: "Awake!" }          
+
+    %{ conv | status: 200, resp_body: "Awake!" }
   end
 
   def route(%Conv{ method: "GET", path: "/wildthings" } = conv) do
-    %{ conv | status: 200, resp_body: "Bears, Lions, Tigers" }          
+    %{ conv | status: 200, resp_body: "Bears, Lions, Tigers" }
   end
 
   def route(%Conv{ method: "GET", path: "/api/bears" } = conv) do

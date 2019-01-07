@@ -3,6 +3,37 @@ defmodule HandlerTest do
 
   import Servy.Handler, only: [handle: 1]
 
+  test "GET /sensors" do
+    request = """
+    GET /sensors HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
+    """
+
+    response = handle(request)
+
+    expected_response = """
+    HTTP/1.1 200 OK\r
+    Content-Type: text/html\r
+    Content-Length: 302\r
+    \r
+    <h1>Sensors</h1>
+    <h2>Snapshots</h2>
+    <ul>
+      <li><imgsrc=\"cam-1-snapshot.jpg\"alt=\"snapshot\"></li>
+      <li><imgsrc=\"cam-2-snapshot.jpg\"alt=\"snapshot\"></li>
+      <li><imgsrc=\"cam-3-snapshot.jpg\"alt=\"snapshot\"></li>
+      </ul>
+
+    <h2>WhereIsBigfoot?</h2>
+    %{lat:\"29.0469N\",lng:\"98.8667W\"}
+    """
+
+    assert remove_whitespace(response) == remove_whitespace(expected_response)
+  end
+
   test "GET /wildthings" do
     request = """
     GET /wildthings HTTP/1.1\r
@@ -40,7 +71,7 @@ defmodule HandlerTest do
     Content-Length: 356\r
     \r
     <h1>All The Bears!</h1>
-    
+
     <ul>
       <li>Brutus - Grizzly</li>
       <li>Iceman - Polar</li>
@@ -254,5 +285,5 @@ defmodule HandlerTest do
 
   defp remove_whitespace(text) do
     String.replace(text, ~r{\s}, "")
-  end 
+  end
 end
